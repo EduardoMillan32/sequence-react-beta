@@ -7,10 +7,10 @@ export default function Login() {
   const [nombre, setNombre] = useState('');
   const [sala, setSala] = useState('');
   const [cargando, setCargando] = useState(false);
-  const [clicsTitulo, setClicsTitulo] = useState(0);
   const { entrarSala } = useSala();
   const { mostrarToast } = useToast();
   const timerRef = useRef(null);
+  const clicsRef = useRef(0);
 
   /**
    * Maneja el evento de clic en el botón "Entrar a la Sala".
@@ -49,17 +49,18 @@ export default function Login() {
     // Limpiar el timer anterior
     if (timerRef.current) clearTimeout(timerRef.current);
 
-    // Si pasa 1 segundo sin tocar, reiniciar el contador
-    timerRef.current = setTimeout(() => {
-      setClicsTitulo(0);
-    }, 1000);
+    // Sumar un clic de forma instantánea
+    clicsRef.current += 1;
 
-    if (clicsTitulo + 1 === 5) {
+    // Si llegamos exactamente a 5 clics
+    if (clicsRef.current === 5) {
       mostrarToast('Versión instalada: 2.0.0', 'info');
-      setClicsTitulo(0);
-      clearTimeout(timerRef.current);
+      clicsRef.current = 0; // Reiniciamos para que no vuelva a salir en el 6to o 7mo clic
     } else {
-      setClicsTitulo(prev => prev + 1);
+      // Si pasa 1 segundo sin tocar, reiniciar el contador a 0
+      timerRef.current = setTimeout(() => {
+        clicsRef.current = 0;
+      }, 1000);
     }
   };
 
