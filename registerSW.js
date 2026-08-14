@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/sequence-react-beta/sw.js', { scope: '/sequence-react-beta/' })})}
