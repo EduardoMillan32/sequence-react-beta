@@ -46,6 +46,7 @@ export default function Lobby() {
   // Interceptar botón hacia atrás para salir directamente de la sala
   useEffect(() => {
     const handlePopState = () => {
+      window.history.pushState({ page: 'sequence' }, '', window.location.href);
       salirSala();
     };
 
