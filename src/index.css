@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+/* 
+ * Estilos globales y utilidades personalizadas para la aplicación Sequence.
+ * Incluye animaciones específicas para el tablero y las cartas.
+ */
+
+@layer base {
+  body {
+    @apply bg-[#1a1a1a] text-white font-sans min-h-screen overflow-x-hidden;
+    overscroll-behavior-x: none;
+    -webkit-tap-highlight-color: transparent;
+    /* Respetar el notch y la barra de estado en móviles */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+}
+
+@layer components {
+  /* Botón principal amarillo */
+  .btn-primary {
+    @apply px-5 py-2.5 text-[1.1rem] font-bold text-black bg-[#f1c40f] rounded-lg transition-all duration-150 select-none hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(241,196,15,0.4)] active:translate-y-0 active:shadow-none disabled:bg-[#95a5a6] disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none;
+  }
+  
+  /* Panel estilo cristal (usado en Login y Lobby) */
+  .glass-panel {
+    @apply bg-gradient-to-br from-[#2c3e50] to-[#34495e] p-8 rounded-2xl border-2 border-[#f1c40f] shadow-[0_10px_30px_rgba(0,0,0,0.5)] text-center w-[90%] max-w-[420px];
+  }
+
+  /* Inputs de texto */
+  .input-field {
+    @apply w-[85%] px-4 py-3 text-[1.1rem] rounded-lg border-2 border-transparent bg-[#ecf0f1] text-[#2c3e50] transition-colors duration-200 outline-none focus:border-[#f1c40f];
+  }
+}
+
+/* ============================================
+   ANIMACIONES DEL TABLERO
+   ============================================ */
+
+/* Secuencias Protegidas */
+.protegida-rojo {
+  outline: 3px solid #e74c3c !important;
+  outline-offset: -3px;
+  box-shadow: inset 0 0 8px rgba(231, 76, 60, 0.6), 0 0 6px rgba(231, 76, 60, 0.5);
+}
+.protegida-azul {
+  outline: 3px solid #3498db !important;
+  outline-offset: -3px;
+  box-shadow: inset 0 0 8px rgba(52, 152, 219, 0.6), 0 0 6px rgba(52, 152, 219, 0.5);
+}
+.protegida-verde {
+  outline: 3px solid #2ecc71 !important;
+  outline-offset: -3px;
+  box-shadow: inset 0 0 8px rgba(46, 204, 113, 0.6), 0 0 6px rgba(46, 204, 113, 0.5);
+}
+
+.protegida-rojo::after,
+.protegida-azul::after,
+.protegida-verde::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 5;
+  animation: brillo-protegida 1.8s ease-in-out infinite alternate;
+  will-change: opacity;
+}
+
+.protegida-rojo::after { background: radial-gradient(ellipse at center, rgba(231, 76, 60, 0.35) 0%, transparent 75%); }
+.protegida-azul::after { background: radial-gradient(ellipse at center, rgba(52, 152, 219, 0.35) 0%, transparent 75%); }
+.protegida-verde::after { background: radial-gradient(ellipse at center, rgba(46, 204, 113, 0.35) 0%, transparent 75%); }
+
+@keyframes brillo-protegida {
+  from { opacity: 0.3; }
+  to   { opacity: 1;   }
+}
+
+/* Animación Jack Gigante */
+@keyframes jack-giro {
+  0%   { transform: scale(0) rotate(-180deg); opacity: 0; }
+  60%  { transform: scale(1.15) rotate(8deg); opacity: 1; }
+  100% { transform: scale(1)   rotate(0deg);  opacity: 1; }
+}
+.animate-jack-giro {
+  animation: jack-giro 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Animaciones de Toast y Fichas */
+@keyframes fadeInDown {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-down {
+  animation: fadeInDown 0.3s ease-out forwards;
+}
+
+@keyframes scaleIn {
+  0% { scale: 0; opacity: 0; }
+  50% { scale: 1.05; }
+  100% { scale: 1; opacity: 1; }
+}
+.animate-scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes scaleInFicha {
+  0% { scale: 0; opacity: 0; }
+  50% { scale: 1.2; }
+  100% { scale: 1; opacity: 1; }
+}
+.animate-scale-in-ficha {
+  animation: scaleInFicha 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+.animate-shake {
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes pulso-ultima {
+  0%   { box-shadow: inset 0 0 4px rgba(241,196,15,0.5),  inset 0 0 8px  rgba(241,196,15,0.3),  inset 0 0 2px rgba(0,0,0,0.4); }
+  50%  { box-shadow: inset 0 0 10px rgba(241,196,15,1),   inset 0 0 20px rgba(241,196,15,0.7),  inset 0 0 4px rgba(0,0,0,0.2); }
+  100% { box-shadow: inset 0 0 4px rgba(241,196,15,0.5),  inset 0 0 8px  rgba(241,196,15,0.3),  inset 0 0 2px rgba(0,0,0,0.4); }
+}
+.animate-pulso-ultima {
+  animation: pulso-ultima 1.8s ease-in-out infinite;
+}
+
+.delay-pulso-ultima {
+  animation: scaleInFicha 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, pulso-ultima 1.8s ease-in-out infinite 0.35s;
+}
+
+@keyframes pulso-removida {
+  0%   { opacity: 0.6; }
+  50%  { opacity: 1;   }
+  100% { opacity: 0.6; }
+}
+.animate-pulso-removida {
+  animation: pulso-removida 1.8s ease-in-out infinite;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; transform: scale(1); }
+  70% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+.animate-fade-out {
+  animation: fadeOut 1.5s ease-out forwards;
+}
