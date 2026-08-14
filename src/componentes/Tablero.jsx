@@ -163,7 +163,9 @@ export default function Tablero() {
               )}
               
               {colorFicha && (
-                <div className={`
+                <div 
+                  key={`${index}-${colorFicha}-${esUltimaColocada ? ultimaFichaColocada.ts : 'fija'}`}
+                  className={`
                   absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[65%] md:w-[70%] max-[700px]:w-[70%] aspect-square rounded-full z-10 
                   shadow-[inset_0_0_8px_rgba(0,0,0,0.5),0_2px_5px_rgba(0,0,0,0.8)] border-2 max-[700px]:border-[1px] border-white
                   transition-all duration-300 ease-in-out
