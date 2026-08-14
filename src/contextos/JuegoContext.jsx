@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { db } from '../config/firebase';
 import { ref, onValue, update, get, runTransaction } from 'firebase/database';
 import { useSala } from './SalaContext';
@@ -30,6 +30,8 @@ export function JuegoProvider({ children }) {
   const [combosYaMarcados, setCombosYaMarcados] = useState([]);
   const [ultimaFichaColocada, setUltimaFichaColocada] = useState(null);
   const [ultimaCasillaRemovida, setUltimaCasillaRemovida] = useState(null);
+
+  const ultimoTurnoProcesado = useRef(null);
 
   const { mostrarToast } = useToast();
 
@@ -375,8 +377,15 @@ export function JuegoProvider({ children }) {
             
             const jugadorEnTurno = jugadores.find(j => j.id === turnoActual);
             
-            if (jugadorEnTurno && jugadorEnTurno.esBot && ordenTurnos[0] === jugadorId) {
-              llamarApiBot(jugadorEnTurno.id);
+            if (jugadorActual.esBot && ordenTurnos[0] === jugadorId) {
+                // Verificamos si este turno ESPECÍFICO ya fue procesado
+                if (turnoProcesadoRef.current !== estadoJuego.turnoActual) {
+                    turnoProcesadoRef.current = estadoJuego.turnoActual; // Levantamos el escudo
+                    llamarApiBot(jugadorActual);
+                }
+            } else if (!jugadorActual.esBot) {
+                // Si le toca a un humano, bajamos el escudo para estar listos para el siguiente bot
+                turnoProcesadoRef.current = null;
             }
           }
         });
