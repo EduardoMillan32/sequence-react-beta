@@ -154,7 +154,7 @@ export default function Tablero() {
                 </div>
               ) : (
                 <img 
-                  src={`./images/cartas/${carta}.png`} 
+                  src={`${import.meta.env.BASE_URL}images/cartas/${carta}.png`} 
                   alt={carta} 
                   className="w-full h-full object-fill pointer-events-none select-none rounded-[3px]"
                   loading="lazy"
@@ -196,7 +196,7 @@ export default function Tablero() {
       >
         {ultimoJack && (
           <img 
-            src={`./images/cartas/${ultimoJack.codigoCarta}.png`} 
+            src={`${import.meta.env.BASE_URL}images/cartas/${ultimoJack.codigoCarta}.png`} 
             alt={ultimoJack.codigoCarta} 
             className="w-[clamp(80px,18vw,160px)] h-auto rounded-lg shadow-[0_0_30px_rgba(255,255,255,0.4),0_8px_30px_rgba(0,0,0,0.8)] animate-jack-giro origin-center pointer-events-none select-none"
             draggable="false"

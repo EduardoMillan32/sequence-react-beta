@@ -41,7 +41,7 @@ export function JuegoProvider({ children }) {
    */
   const reproducirSonido = (tipo) => {
     try {
-      const audio = new Audio(`./sounds/${tipo}.mp3`);
+      const audio = new Audio(`${import.meta.env.BASE_URL}sounds/${tipo}.mp3`);
       audio.volume = 0.6;
       audio.play().catch(() => {
           // El navegador bloqueó la reproducción o el archivo no existe (silencio)

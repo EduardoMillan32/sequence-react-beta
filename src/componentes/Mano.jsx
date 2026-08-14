@@ -96,7 +96,7 @@ export default function Mano({ miTurno, colorJugador, nombreJugadorTurno, botPen
               `}
             >
               <img 
-                src={`./images/cartas/${carta}.png`} 
+                src={`${import.meta.env.BASE_URL}images/cartas/${carta}.png`} 
                 alt={carta} 
                 className={`w-full h-full object-fill rounded-md pointer-events-none select-none ${esSeleccionada ? 'ring-2 ring-[#f1c40f]' : ''}`}
                 draggable="false"
