@@ -30,8 +30,7 @@ export function JuegoProvider({ children }) {
   const [combosYaMarcados, setCombosYaMarcados] = useState([]);
   const [ultimaFichaColocada, setUltimaFichaColocada] = useState(null);
   const [ultimaCasillaRemovida, setUltimaCasillaRemovida] = useState(null);
-
-  const ultimoTurnoProcesado = useRef(null);
+  const turnoProcesadoRef = useRef(null);
 
   const { mostrarToast } = useToast();
 
@@ -43,7 +42,7 @@ export function JuegoProvider({ children }) {
    */
   const reproducirSonido = (tipo) => {
     try {
-      const audio = new Audio(`${import.meta.env.BASE_URL}sounds/${tipo}.mp3`);
+      const audio = new Audio(`/sounds/${tipo}.mp3`);
       audio.volume = 0.6;
       audio.play().catch(() => {
           // El navegador bloqueó la reproducción o el archivo no existe (silencio)
@@ -358,6 +357,9 @@ export function JuegoProvider({ children }) {
   useEffect(() => {
     if (!salaId || !turnoActual || !ordenTurnos || ordenTurnos.length === 0) return;
 
+    // EL ESCUDO: Si ya llamamos al bot en ESTE turno, abortamos para que React no repita el proceso
+    if (turnoProcesadoRef.current === turnoActual) return;
+
     // Pausa de gracia para permitir que el cálculo de secuencias declare victoria
     const botTimer = setTimeout(() => {
       get(ref(db, `${salaId}/estado`)).then((estadoSnap) => {
@@ -377,15 +379,15 @@ export function JuegoProvider({ children }) {
             
             const jugadorEnTurno = jugadores.find(j => j.id === turnoActual);
             
-            if (jugadorActual.esBot && ordenTurnos[0] === jugadorId) {
-                // Verificamos si este turno ESPECÍFICO ya fue procesado
-                if (turnoProcesadoRef.current !== estadoJuego.turnoActual) {
-                    turnoProcesadoRef.current = estadoJuego.turnoActual; // Levantamos el escudo
-                    llamarApiBot(jugadorActual);
-                }
-            } else if (!jugadorActual.esBot) {
-                // Si le toca a un humano, bajamos el escudo para estar listos para el siguiente bot
-                turnoProcesadoRef.current = null;
+            // Solo el Host debe llamar al bot
+            if (jugadorEnTurno && jugadorEnTurno.esBot && ordenTurnos[0] === jugadorId) {
+              // ¡LEVANTAMOS EL ESCUDO! Guardamos el ID del bot para no volver a llamarlo
+              turnoProcesadoRef.current = turnoActual;
+              llamarApiBot(jugadorEnTurno.id);
+            } 
+            else if (jugadorEnTurno && !jugadorEnTurno.esBot) {
+              // Si es el turno de un humano, bajamos el escudo para limpiar la memoria
+              turnoProcesadoRef.current = null;
             }
           }
         });
