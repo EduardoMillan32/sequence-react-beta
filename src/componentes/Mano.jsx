@@ -25,13 +25,21 @@ export default function Mano({ miTurno, colorJugador, nombreJugadorTurno, botPen
     if (colorJugador === 'verde') clasesTituloTurno = 'text-[#2ecc71] font-bold [text-shadow:0_0_8px_rgba(46,204,113,0.8)]';
   }
 
+  // Clases dinámicas para el contorno y brillo de la Mano
+  let clasesContornoMano = 'border-[#f1c40f] shadow-[0_-5px_25px_rgba(0,0,0,0.8)]'; // Default (No es mi turno)
+  if (miTurno) {
+    if (colorJugador === 'rojo') clasesContornoMano = 'border-[#e74c3c] shadow-[0_-5px_25px_rgba(231,76,60,0.45)]';
+    if (colorJugador === 'azul') clasesContornoMano = 'border-[#3498db] shadow-[0_-5px_25px_rgba(52,152,219,0.45)]';
+    if (colorJugador === 'verde') clasesContornoMano = 'border-[#2ecc71] shadow-[0_-5px_25px_rgba(46,204,113,0.45)]';
+  }
+
   return (
     <div className={`fixed bottom-0 left-1/2 -translate-x-1/2 bg-[#1a252f]/95 backdrop-blur-md border-2 border-b-0 z-50 flex 
-      flex-col items-center transition-all duration-400 shadow-[0_-5px_25px_rgba(0,0,0,0.8)] w-full max-w-[680px] 
+      flex-col items-center transition-all duration-400 w-full max-w-[680px] 
       p-[8px_12px_12px_12px] rounded-[16px_16px_0_0] md:w-[95%] md:p-[12px_20px_15px_20px] xl:max-w-[750px] 
       landscape:max-h-[500px]:p-[4px_10px_6px_10px] landscape:max-h-[500px]:max-w-full landscape:max-h-[500px]:rounded-[10px_10px_0_0] 
       min-[600px]:landscape:max-h-[700px]:max-w-[800px]
-      ${miTurno ? 'border-[#2ecc71] shadow-[0_-5px_20px_rgba(46,204,113,0.3)]' : 'border-[#f1c40f]'}
+      ${clasesContornoMano}
     `}>
       
       <div className="w-full flex justify-between items-center px-2 mb-2">
