@@ -123,7 +123,7 @@ export default function Lobby() {
               contentEditable
               suppressContentEditableWarning
               onInput={(e) => cambiarNombreEquipo(colorSeleccionado, e.target.innerText)}
-              className="outline-none border-b border-dashed border-white/50 focus:border-white"
+              className="outline-none"
             >
               {nombresEquipos[colorSeleccionado] || (colorSeleccionado.charAt(0).toUpperCase() + colorSeleccionado.slice(1))}
             </span>

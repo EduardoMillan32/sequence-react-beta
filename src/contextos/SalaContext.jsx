@@ -22,6 +22,28 @@ export function SalaProvider({ children }) {
   const [mensajeValidacion, setMensajeValidacion] = useState('');
   const { mostrarToast } = useToast();
 
+  // Limpieza al cerrar la pestaña abruptamente (Idéntico a tu Vanilla JS)
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Solo limpiamos si estamos en una sala y el juego AÚN NO ha iniciado (estamos en el Lobby)
+      if (salaId && jugadorId && (!estadoJuego || !estadoJuego.iniciado)) {
+        const baseUrl = "https://secuence-7d7af-default-rtdb.firebaseio.com";
+        
+        // Peticiones "keepalive" para que se envíen aunque el navegador se esté cerrando
+        fetch(`${baseUrl}/${salaId}/jugadores/${jugadorId}.json`, { method: 'DELETE', keepalive: true }).catch(()=>{});
+        fetch(`${baseUrl}/${salaId}/presencia/${jugadorId}.json`, { method: 'DELETE', keepalive: true }).catch(()=>{});
+        
+        // Si no hay más jugadores humanos, destruir la sala completa
+        if (jugadores.filter(j => !j.esBot).length <= 1) {
+           fetch(`${baseUrl}/${salaId}.json`, { method: 'DELETE', keepalive: true }).catch(()=>{});
+        }
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [salaId, jugadorId, estadoJuego, jugadores]);
+
   /**
    * Efecto de inicialización que verifica si el usuario tiene una sesión activa guardada en el navegador (localStorage).
    * Si existe, consulta a Firebase para confirmar que la sala y el jugador aún son válidos.
