@@ -17,6 +17,14 @@ export default function Mano({ miTurno, colorJugador, nombreJugadorTurno, botPen
     mazoCount
   } = useJuego();
 
+  // Replicamos exactamente los colores y el text-shadow de tu jugador.css original
+  let clasesTituloTurno = 'text-white';
+  if (miTurno) {
+    if (colorJugador === 'rojo') clasesTituloTurno = 'text-[#e74c3c] font-bold [text-shadow:0_0_8px_rgba(231,76,60,0.8)]';
+    if (colorJugador === 'azul') clasesTituloTurno = 'text-[#3498db] font-bold [text-shadow:0_0_8px_rgba(52,152,219,0.8)]';
+    if (colorJugador === 'verde') clasesTituloTurno = 'text-[#2ecc71] font-bold [text-shadow:0_0_8px_rgba(46,204,113,0.8)]';
+  }
+
   return (
     <div className={`fixed bottom-0 left-1/2 -translate-x-1/2 bg-[#1a252f]/95 backdrop-blur-md border-2 border-b-0 z-50 flex 
       flex-col items-center transition-all duration-400 shadow-[0_-5px_25px_rgba(0,0,0,0.8)] w-full max-w-[680px] 
@@ -42,7 +50,7 @@ export default function Mano({ miTurno, colorJugador, nombreJugadorTurno, botPen
         </div>
         
         <div className="flex-1 flex justify-center">
-          <h3 className={`m-0 text-[0.85rem] md:text-[1rem] text-center transition-colors duration-300 font-sans ${miTurno ? `text-${colorJugador === 'rojo' ? 'red' : colorJugador === 'azul' ? 'blue' : 'green'}-500 font-bold drop-shadow-[0_0_8px_rgba(var(--color-${colorJugador}),0.8)] animate-pulse` : 'text-white'}`}>
+          <h3 className={`m-0 text-[0.85rem] md:text-[1rem] text-center transition-colors duration-300 font-sans ${clasesTituloTurno}`}>
             {miTurno ? "Tu Mano (¡ES TU TURNO!)" : botPensando ? `🤖 ${nombreJugadorTurno} está pensando...` : `Esperando a ${nombreJugadorTurno}...`}
           </h3>
         </div>

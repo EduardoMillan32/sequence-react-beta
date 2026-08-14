@@ -98,7 +98,9 @@ export default function Tablero() {
       }
       
       // Validar si la ficha es parte de un Sequence protegido
-      if (fichasProtegidas && fichasProtegidas.includes(indice)) {
+      const estaProtegida = fichasProtegidas && (Array.isArray(fichasProtegidas) ? fichasProtegidas.includes(indice) : !!fichasProtegidas[indice]);
+
+      if (estaProtegida) {
         mostrarToast("No puedes quitar una ficha que forma parte de un Sequence.", "error");
         return;
       }
