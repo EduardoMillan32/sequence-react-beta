@@ -222,7 +222,7 @@ export default function Juego() {
       >
         {jackAnimado && (
           <img 
-            src={`/images/cartas/${jackAnimado.codigoCarta}.png`} 
+            src={`./images/cartas/${jackAnimado.codigoCarta}.png`} 
             alt="Jack" 
             className="w-[clamp(80px,18vw,160px)] h-auto rounded-lg shadow-[0_0_30px_rgba(255,255,255,0.4),0_8px_30px_rgba(0,0,0,0.8)] animate-jack-giro origin-center pointer-events-none select-none"
           />
